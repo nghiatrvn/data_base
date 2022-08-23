@@ -1,0 +1,65 @@
+#Tittle: install and configure mongodb-replication-on-centos-7
+#Create_by: nghiatran
+#Date: 20220823
+#https://vietcalls.com/huong-dan-cau-hinh-replica-set-cluster-tren-mongodb/
+
+Step 1: Install mongodb
+vim /etc/yum.repos.d/mongodb.repo
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+[mongodb-org-5.0]
+name=MongoDB Repository
+baseurl=https://repo.mongodb.org/yum/redhat/$releasever/mongodb-org/5.0/x86_64/
+gpgcheck=1
+enabled=1
+gpgkey=https://www.mongodb.org/static/pgp/server-5.0.asc
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+yum install -y mongodb-org
+or
+yum install -y mongodb-org-<version> mongodb-org-database-<version> mongodb-org-server-<version> mongodb-org-shell-<version> mongodb-org-mongos-<version> mongodb-org-tools-<version>
+
+systemctl start mongod
+systemctl enable mongod
+systemctl status mongod
+
+firewall-cmd --permanent --add-port=22/tcp
+firewall-cmd --permanent --add-port=27017/tcp
+firewall-cmd --reload
+
+Step 2: Configure
+vim /usr/lib/systemd/system/mongod.service
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#ExecStart=/usr/bin/mongod $OPTIONS
+ExecStart=/usr/bin/mongod --bind_ip_all --dbpath /var/lib/mongo --logpath /var/log/mongodb/mongod.log --logappend --pidfilepath /var/run/mongodb/mongod.pid --fork --replSet "exo"
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+systemctl daemon-reload
+systemctl restart mongod
+systemctl status mongod
+
+Step 3: Run replication
+mongo
+
+rs.initiate({
+    "_id": "exo",
+    "version": 1,
+    "members": [
+        {
+            "_id": 1,
+            "host": "10.1.20.1:27017",
+            "priority": 2
+        },
+        {
+            "_id": 2,
+            "host": "10.1.20.2:27017",
+            "priority": 1
+        }
+    ]
+}, { force: true });
+
+#note: mongo_master: 10.1.20.1 and mongo_slave: 10.1.20.2
+#on server 10.1.20.2
+rs.slaveOk();
+show dbs;
+#on server 10.1.20.1
+use test1;
+db.createCollection('test1');
+db.getCollection("test1").insert({    "firstName": "bui",    "lastName": "huy",    "started": NumberInt("2020")})

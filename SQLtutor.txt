@@ -1,0 +1,116 @@
+#SQL_basic_W3SHOOL
+#create_by: nghiatran
+#date: 20220819
+
+RDBMS: Relational Database Management System-Hệ thống quản lý cơ sở dữ liệu
+eg: SECLECT * FROM <table>;
+
+*Some of the most important SQL commands:
+SECLECT - extracts (trích xuất) data from a database
+UPDATE - updates data in a database
+DELETE - delete data from a database
+INSERT INTO - inserts new data into a database
+CREATE DATABASE - create a new database
+ALTER DATABASE - modifies (sửa đổi) a database
+CREATE TABLE - create a new table
+DROP TABLE - delete a table
+CREATE INDEX - create an index (search key)
+DROP INDEX - delete an index
+---------------------------------------------------------------------------------------------
+****The SQL SELECT Statement***
+SELECT column1, column2,...
+FROM table_name;
+
+eg: SECLECT * FROM Customer;
+---------------------------------------------------------------------------------------------
+****The SQL SELECT DISTINCT Statement****
+- Chỉ in ra kết quả khác nhau của trường thông tin.
+SELECT DISTINCT column1, column2, ...
+FROM table_name;
+---------------------------------------------------------------------------------------------
+****The SQL WHERE Clause****
+- Lọc các bản ghi
+SELECT column1, column2, ...
+FROM table_name
+WHERE condition;
+
+eg: SELECT * FROM Customers WHERE Country='UK';
+    SELECT * FROM Products WHERE Price > 30;
+----------------------------------------------------------------------------------------------
+****SQL AND, OR and NOT Operators****
+SELECT column1, column2, ...
+FROM table_name
+WHERE condition1 AND/OR condition2 AND/OR condition3 ...;
+
+SELECT column1, column2, ...
+FROM table_name
+WHERE NOT condition;
+
+eg: SELECT * FROM Customers WHERE Country='Germany' AND City='Berlin';
+    SELECT * FROM Customers WHERE NOT Country='Germany';
+    SELECT * FROM Customers WHERE NOT Country='Germany' AND NOT Country='UK';
+-----------------------------------------------------------------------------------------------
+****SQL ORDER BY Keyword****
+SELECT column1, column2, ...
+FROM table_name
+ORDER BY column1, column2, ... ASC|DESC;
+
+eg: SELECT * FROM Customers ORDER BY Country DESC;
+------------------------------------------------------------------------------------------------
+****The SQL INSERT INTO Statement****
+- Thêm các bản ghi mới
+INSERT INTO table_name (column1, column2, column3, ...)
+VALUES (value1, value2, value3, ...);
+
+eg: INSERT INTO Customers (CustomerName, City, Country) VALUES ('Nghiatran','Hanoi','Vietnam');
+------------------------------------------------------------------------------------------------
+****The IS NULL Operator****
+SELECT column_names
+FROM table_name
+WHERE column_name IS NULL;
+
+SELECT column_names
+FROM table_name
+WHERE column_name IS NOT NULL;
+
+eg: SELECT CustomerName, ContactName, Address FROM Customers WHERE Address IS NULL;
+-------------------------------------------------------------------------------------------------
+****The SQL UPDATE Statement****
+Chú ý: Nếu bỏ qua tham số WHERE thì tất cả bản ghi sẽ được cập nhật.
+UPDATE table_name
+SET column1 = value1, column2 = value2, ...
+WHERE condition;
+
+eg: UPDATE Customers SET CustomerName='Nghiatran' WHERE City='Hanoi';
+--------------------------------------------------------------------------------------------------
+****SQL DELETE Statement*****
+DELETE FROM table_name WHERE condition;
+---------------------------------------------------------------------------------------------------
+****SQL TOP, LIMIT, FETCH FIRST or ROWNUM Clause****
+-MySQL Syntax:
+SELECT column_name(s) FROM table_name WHERE condition LIMIT number;
+
+eg: SELECT TOP 4 * FROM Customers;
+    SELECT * FROM Customers LIMIT 5;
+---------------------------------------------------------------------------------------------------
+****SQL MIN() and MAX() Functions****
+SELECT MIN(column_name) FROM table_name WHERE condition;
+SELECT MAX(column_name) FROM table_name WHERE condition;
+
+eg: SECLECT MIN(Price) Products;
+---------------------------------------------------------------------------------------------------
+****SQL COUNT(), AVG() and SUM() Functions****
+SELECT COUNT(column_name) FROM table_name WHERE condition;
+SELECT AVG(column_name) FROM table_name WHERE condition;
+SELECT SUM(column_name) FROM table_name WHERE condition;
+
+eg: SELECT COUNT(ProductID) FROM Products;
+----------------------------------------------------------------------------------------------------
+****SQL LIKE Operator****
+SELECT column1, column2, ...
+FROM table_name
+WHERE columnN LIKE pattern;
+
+eg: Starting with "a": SELECT * FROM Customers WHERE CustomerName LIKE 'a%';
+    Ending with "a": SELECT * FROM Customers WHERE CustomerName LIKE '%a';
+    
