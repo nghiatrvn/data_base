@@ -63,3 +63,30 @@ show dbs;
 use test1;
 db.createCollection('test1');
 db.getCollection("test1").insert({    "firstName": "bui",    "lastName": "huy",    "started": NumberInt("2020")})
+
+-----------------------------------------------------------------------------------------------------------------------------
+Tạo user với role là root
+use admin
+db.createUser(
+  {
+     user: "nghiatran",
+     pwd: "123123Aa",
+     roles:["root"]
+  }
+);
+db.auth("nghiatran", "123123Aa")
+
+Truy cập user được phân quyền root để tạo và phân quyền cho các user khác
+ mongo -u nghiatran -p "123123Aa" --shell
+ mongo -u dev -p "123123Aa" --authenticationDatabase=xrd-mongo-dev --shell
+ 
+vd:	  
+use admin
+db.createUser( { user: "dev",
+                 pwd: "123123Aa",
+                 roles: [ { role: "readWrite", db: "test" }]
+				}
+			   )
+db.auth("dev", "123123Aa")
+
+
